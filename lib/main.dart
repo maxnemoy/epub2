@@ -1,5 +1,6 @@
 import 'package:epub2/image.dart';
 import 'package:epub_view/epub_view.dart';
+import 'package:slide_panel/slide_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemChrome, SystemUiOverlayStyle;
 
@@ -116,19 +117,29 @@ class _MyHomePageState extends State<MyHomePage> {
         body: EpubView(
           onExternalLinkPressed: (link) async {
             var uri = Uri.parse(link);
-            //EpubBook epubBook = await EpubReader.readBook(bytes)
             if (uri.origin == "http://epub.epub") {
-              debugPrint(uri.path);
-              _epubReaderController.document.then((book) {
-                book.Content!.Images!.forEach((key, value) {
-                  if (key == uri.path.substring(1)) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ImageViewer(bytes: value.Content!)));
-                  }
+              if (uri.path.split("/")[1] == "notes") {
+                debugPrint(uri.path.substring(1));
+                debugPrint(uri.queryParameters["id"]);
+                showResizableBottomSheet(
+                    context: context,
+                    sheet: ResizableBottomSheet(
+                        child: SheetView(
+                            title: "uri.path.substring(1)",
+                            body: const Text("Hello world", style: TextStyle(color: Colors.black),))));
+              }
+              if (uri.path.split("/")[1] == "images") {
+                debugPrint(uri.path.substring(1));
+                _epubReaderController.document.then((book) {
+                  book.Content!.Images!.forEach((key, value) {
+                    if (key == uri.path.substring(1)) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              ImageViewer(bytes: value.Content!)));
+                    }
+                  });
                 });
-              });
-              //_epubReaderController.
+              }
             }
           },
           builders: EpubViewBuilders<DefaultBuilderOptions>(

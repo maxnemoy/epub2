@@ -79,7 +79,7 @@ packages:
     source: hosted
     version: "3.0.0"
   epubx:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: epubx
       url: "https://pub.dartlang.org"
@@ -205,6 +205,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slide_panel:
+    dependency: "direct main"
+    description:
+      path: "packages/slide_panel"
+      relative: true
+    source: path
+    version: "0.0.1"
   source_span:
     dependency: transitive
     description:
