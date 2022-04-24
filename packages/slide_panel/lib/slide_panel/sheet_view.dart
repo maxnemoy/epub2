@@ -6,8 +6,6 @@ import 'package:slide_panel/slide_panel/custom_chapter_builder.dart';
 class SheetView extends StatefulWidget {
   SheetView(
       {Key? key,
-      required this.title,
-      required this.body,
       required this.paragraphId,
       this.backgroundColor = Colors.white,
       this.accentColor = Colors.orange,
@@ -16,9 +14,6 @@ class SheetView extends StatefulWidget {
             TextStyle(
                 fontSize: 18, fontStyle: FontStyle.italic, color: accentColor),
         super(key: key);
-
-  final String title;
-  final Widget body;
   final Color backgroundColor;
   final Color accentColor;
   final TextStyle titleTextStyle;

@@ -83,8 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     _epubReaderController = EpubController(
-      document: EpubDocument.openAsset('assets/example.epub'),
-    );
+        // document: EpubDocument.openAsset('assets/notes_example.epub'),
+        document: EpubDocument.openAsset('assets/example.epub'),
+        epubCfi: "note1");
     _notesReaderController = EpubController(
       document: EpubDocument.openAsset('assets/notes_example.epub'),
     );
@@ -124,15 +125,11 @@ class _MyHomePageState extends State<MyHomePage> {
             var uri = Uri.parse(link);
             if (uri.origin == "http://epub.epub") {
               if (uri.path.split("/")[1] == "notes") {
-                // debugPrint(uri.path.substring(1));
-                // debugPrint(uri.queryParameters["id"]);
                 showResizableBottomSheet(
                     context: context,
                     sheet: ResizableBottomSheet(
                         child: SheetView(
-                            title: uri.queryParameters["id"].toString(),
-                            paragraphId: uri.queryParameters["id"] as String,
-                            body: Container())));
+                            paragraphId: uri.queryParameters["id"] as String)));
               }
               if (uri.path.split("/")[1] == "images") {
                 debugPrint(uri.path.substring(1));
@@ -151,7 +148,6 @@ class _MyHomePageState extends State<MyHomePage> {
           builders: EpubViewBuilders<DefaultBuilderOptions>(
             options: const DefaultBuilderOptions(),
             chapterDividerBuilder: (_) => const Divider(),
-            
           ),
           controller: _epubReaderController,
         ),
@@ -159,6 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _showCurrentEpubCfi(context) {
     final cfi = _epubReaderController.generateEpubCfi();
+
+    //_epubReaderController.g
 
     if (cfi != null) {
       ScaffoldMessenger.of(context).showSnackBar(
