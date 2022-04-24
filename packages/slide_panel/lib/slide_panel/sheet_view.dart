@@ -68,10 +68,14 @@ class _SheetViewState extends State<SheetView> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 25, left: 25, bottom: 20),
-            child: Text(
-              widget.title,
-              style: widget.titleTextStyle,
+            child: EpubViewActualChapter(
+            controller: _notesReaderController,
+            builder: (chapterValue) => Text(
+              chapterValue?.chapter?.Title?.replaceAll('\n', '').trim() ?? '',
+              textAlign: TextAlign.start,
+              style:  widget.titleTextStyle,
             ),
+          ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 25),
