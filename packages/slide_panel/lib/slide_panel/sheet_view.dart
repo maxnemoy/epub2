@@ -1,11 +1,14 @@
+import 'package:epub_view/epub_view.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_panel/slide_panel/controller_provider.dart';
+import 'package:slide_panel/slide_panel/custom_chapter_builder.dart';
 
-class SheetView extends StatelessWidget {
+class SheetView extends StatefulWidget {
   SheetView(
       {Key? key,
       required this.title,
       required this.body,
+      required this.paragraphId,
       this.backgroundColor = Colors.white,
       this.accentColor = Colors.orange,
       TextStyle? titleTextStyle})
@@ -19,6 +22,28 @@ class SheetView extends StatelessWidget {
   final Color backgroundColor;
   final Color accentColor;
   final TextStyle titleTextStyle;
+  final String paragraphId;
+
+  @override
+  State<SheetView> createState() => _SheetViewState();
+}
+
+class _SheetViewState extends State<SheetView> {
+  late EpubController _notesReaderController;
+
+  @override
+  void initState() {
+    _notesReaderController = EpubController(
+      document: EpubDocument.openAsset('assets/notes_example.epub'),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _notesReaderController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,31 +69,66 @@ class SheetView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 25, left: 25, bottom: 20),
             child: Text(
-              title,
-              style: titleTextStyle,
+              widget.title,
+              style: widget.titleTextStyle,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 25),
             child: Container(
-              color: accentColor,
+              color: widget.accentColor,
               height: 2,
               width: double.infinity,
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 5, left: 25),
-              child: SingleChildScrollView(
-                  controller: ControllerProvider.of(context).controller,
-                  child: Container(
-                      width: double.infinity,
-                      color: accentColor.withOpacity(0.05),
-                      padding:
-                          const EdgeInsets.only(left: 25, right: 20, bottom: 20),
-                      child: body))
+          SizedBox(
+            height: 300,
+            child: Container(
+              width: double.infinity,
+              color: widget.accentColor.withOpacity(0.05),
+              padding: const EdgeInsets.only(left: 25, right: 20, bottom: 20),
+              child: EpubView(
+                builders: EpubViewBuilders<DefaultBuilderOptions>(
+                  options: const DefaultBuilderOptions(),
+                  chapterDividerBuilder: (_) => const Divider(),
+                  chapterBuilder: (context,
+                          builders,
+                          document,
+                          chapters,
+                          paragraphs,
+                          index,
+                          chapterIndex,
+                          paragraphIndex,
+                          onExternalLinkPressed) =>
+                      customChapterBuilder(
+                          context,
+                          builders,
+                          document,
+                          chapters,
+                          paragraphs,
+                          index,
+                          chapterIndex,
+                          paragraphIndex,
+                          onExternalLinkPressed,
+                          widget.paragraphId),
+                ),
+                controller: _notesReaderController,
+              ),
             ),
-          ),
+          )
+          // Expanded(
+          //   child: Padding(
+          //       padding: const EdgeInsets.only(bottom: 5, left: 25),
+          //       child: SingleChildScrollView(
+          //           controller: ControllerProvider.of(context).controller,
+          //           child: Container(
+          //             width: double.infinity,
+          //              color: widget.accentColor.withOpacity(0.05),
+          //             padding: const EdgeInsets.only(
+          //                 left: 25, right: 20, bottom: 20),
+          //             child:
+          //           ))),
+          // ),
         ],
       ),
     );

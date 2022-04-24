@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         darkTheme: ThemeData(
           primarySwatch: Colors.blue,
-          brightness: Brightness.dark,
+          brightness: Brightness.light,
         ),
         debugShowCheckedModeBanner: false,
         home: const MyHomePage(),
@@ -78,11 +78,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late EpubController _epubReaderController;
+  late EpubController _notesReaderController;
 
   @override
   void initState() {
     _epubReaderController = EpubController(
       document: EpubDocument.openAsset('assets/example.epub'),
+    );
+    _notesReaderController = EpubController(
+      document: EpubDocument.openAsset('assets/notes_example.epub'),
     );
     super.initState();
   }
@@ -90,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     _epubReaderController.dispose();
+    _notesReaderController.dispose();
     super.dispose();
   }
 
@@ -119,14 +124,15 @@ class _MyHomePageState extends State<MyHomePage> {
             var uri = Uri.parse(link);
             if (uri.origin == "http://epub.epub") {
               if (uri.path.split("/")[1] == "notes") {
-                debugPrint(uri.path.substring(1));
-                debugPrint(uri.queryParameters["id"]);
+                // debugPrint(uri.path.substring(1));
+                // debugPrint(uri.queryParameters["id"]);
                 showResizableBottomSheet(
                     context: context,
                     sheet: ResizableBottomSheet(
                         child: SheetView(
-                            title: "uri.path.substring(1)",
-                            body: const Text("Hello world", style: TextStyle(color: Colors.black),))));
+                            title: uri.queryParameters["id"].toString(),
+                            paragraphId: uri.queryParameters["id"] as String,
+                            body: Container())));
               }
               if (uri.path.split("/")[1] == "images") {
                 debugPrint(uri.path.substring(1));
@@ -145,6 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
           builders: EpubViewBuilders<DefaultBuilderOptions>(
             options: const DefaultBuilderOptions(),
             chapterDividerBuilder: (_) => const Divider(),
+            
           ),
           controller: _epubReaderController,
         ),

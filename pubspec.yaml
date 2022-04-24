@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   epub_view: ^3.0.0
+    # path: "./packages/epub_view"
   slide_panel:
     path: "./packages/slide_panel"
 
