@@ -1,6 +1,7 @@
+import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:epub2/image.dart';
+import 'package:epub2/sheet_view.dart';
 import 'package:epub_view/epub_view.dart';
-import 'package:slide_panel/slide_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemChrome, SystemUiOverlayStyle;
 
@@ -83,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     _epubReaderController = EpubController(
-      document: EpubDocument.openAsset('assets/example.epub'),
+      document: EpubDocument.openAsset('assets/notes_example.epub'),
     );
     _notesReaderController = EpubController(
       document: EpubDocument.openAsset('assets/notes_example.epub'),
@@ -124,14 +125,20 @@ class _MyHomePageState extends State<MyHomePage> {
             var uri = Uri.parse(link);
             if (uri.origin == "http://epub.epub") {
               if (uri.path.split("/")[1] == "notes") {
-                // debugPrint(uri.path.substring(1));
-                // debugPrint(uri.queryParameters["id"]);
-                showResizableBottomSheet(
-                    context: context,
-                    sheet: ResizableBottomSheet(
-                        child: SheetView(
-                            paragraphId: uri.queryParameters["id"] as String,
-                           )));
+                showFlexibleBottomSheet(
+                  minHeight: 0,
+                  initHeight: 0.5,
+                  maxHeight: 1,
+                  context: context,
+                  bottomSheetColor: Colors.transparent,
+                  builder: (context, controller, offset) => _buildBottomSheet(
+                      context,
+                      controller,
+                      offset,
+                      uri.queryParameters["id"] as String),
+                  anchors: [0, 0.5, 1],
+                  isSafeArea: true,
+                );
               }
               if (uri.path.split("/")[1] == "images") {
                 debugPrint(uri.path.substring(1));
@@ -150,7 +157,6 @@ class _MyHomePageState extends State<MyHomePage> {
           builders: EpubViewBuilders<DefaultBuilderOptions>(
             options: const DefaultBuilderOptions(),
             chapterDividerBuilder: (_) => const Divider(),
-            
           ),
           controller: _epubReaderController,
         ),
@@ -172,5 +178,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     }
+  }
+
+  Widget _buildBottomSheet(BuildContext context,
+      ScrollController scrollController, double bottomSheetOffset, String id) {
+    return Material(
+      color: Colors.white,
+      borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      child: SheetView(
+        paragraphId: id,
+        controller: scrollController,
+      ),
+    );
   }
 }

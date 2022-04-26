@@ -22,6 +22,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  bottom_inset_observer:
+    dependency: transitive
+    description:
+      name: bottom_inset_observer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
+  bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: bottom_sheet
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   characters:
     dependency: transitive
     description:
@@ -205,13 +219,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  slide_panel:
-    dependency: "direct main"
-    description:
-      path: "packages/slide_panel"
-      relative: true
-    source: path
-    version: "0.0.1"
   source_span:
     dependency: transitive
     description:
@@ -284,4 +291,4 @@ packages:
     version: "5.3.1"
 sdks:
   dart: ">=2.16.2 <3.0.0"
-  flutter: ">=2.2.0"
+  flutter: ">=2.10.0"

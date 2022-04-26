@@ -10,10 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  epub_view:
+  epub_view: #^3.0.0
       path: "./packages/epub_view"
-  slide_panel:
-      path: "./packages/slide_panel"
+  bottom_sheet: ^3.0.0
 
   cupertino_icons: ^1.0.2
 
