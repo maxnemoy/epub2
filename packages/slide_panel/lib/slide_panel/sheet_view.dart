@@ -6,8 +6,6 @@ import 'package:slide_panel/slide_panel/custom_chapter_builder.dart';
 class SheetView extends StatefulWidget {
   SheetView(
       {Key? key,
-      required this.title,
-      required this.body,
       required this.paragraphId,
       this.backgroundColor = Colors.white,
       this.accentColor = Colors.orange,
@@ -17,8 +15,6 @@ class SheetView extends StatefulWidget {
                 fontSize: 18, fontStyle: FontStyle.italic, color: accentColor),
         super(key: key);
 
-  final String title;
-  final Widget body;
   final Color backgroundColor;
   final Color accentColor;
   final TextStyle titleTextStyle;
@@ -67,12 +63,16 @@ class _SheetViewState extends State<SheetView> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 25, left: 25, bottom: 20),
-            child: Text(
-              widget.title,
-              style: widget.titleTextStyle,
-            ),
-          ),
+              padding: const EdgeInsets.only(top: 25, left: 25, bottom: 20),
+              child: EpubViewActualChapter(
+                controller: _notesReaderController,
+                builder: (chapterValue) => Text(
+                  chapterValue?.chapter?.Title?.replaceAll('\n', '').trim() ??
+                      '',
+                  textAlign: TextAlign.start,
+                  style: widget.titleTextStyle,
+                ),
+              )),
           Padding(
             padding: const EdgeInsets.only(left: 25),
             child: Container(
@@ -81,12 +81,13 @@ class _SheetViewState extends State<SheetView> {
               width: double.infinity,
             ),
           ),
-          SizedBox(
+          Container(
             height: 300,
-            child: Container(
-              width: double.infinity,
-              color: widget.accentColor.withOpacity(0.05),
-              padding: const EdgeInsets.only(left: 25, right: 20, bottom: 20),
+            width: double.infinity,
+            color: widget.accentColor.withOpacity(0.05),
+            padding: const EdgeInsets.only(left: 25, right: 20, bottom: 20),
+            child: SingleChildScrollView(
+              controller: ControllerProvider.of(context).controller,
               child: EpubView(
                 builders: EpubViewBuilders<DefaultBuilderOptions>(
                   options: const DefaultBuilderOptions(),

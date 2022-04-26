@@ -130,9 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     context: context,
                     sheet: ResizableBottomSheet(
                         child: SheetView(
-                            title: uri.queryParameters["id"].toString(),
                             paragraphId: uri.queryParameters["id"] as String,
-                            body: Container())));
+                           )));
               }
               if (uri.path.split("/")[1] == "images") {
                 debugPrint(uri.path.substring(1));
