@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     _epubReaderController = EpubController(
-      document: EpubDocument.openAsset('assets/notes_example.epub'),
+      document: EpubDocument.openAsset('assets/example.epub'),
     );
     _notesReaderController = EpubController(
       document: EpubDocument.openAsset('assets/notes_example.epub'),
@@ -123,6 +123,8 @@ class _MyHomePageState extends State<MyHomePage> {
         body: EpubView(
           onExternalLinkPressed: (link) async {
             var uri = Uri.parse(link);
+            print(uri.path);
+            print(uri.queryParameters["id"]);
             if (uri.origin == "http://epub.epub") {
               if (uri.path.split("/")[1] == "notes") {
                 showFlexibleBottomSheet(
